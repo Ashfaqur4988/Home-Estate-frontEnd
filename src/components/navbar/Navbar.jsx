@@ -1,4 +1,3 @@
-import { Menu } from "lucide-react";
 import "./navbar.scss";
 import { useState } from "react";
 const Navbar = () => {
