@@ -1,8 +1,13 @@
+import { useState } from "react";
 import "./login.scss";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import apiRequest from "../../lib/apiRequest.js";
 
 const Login = () => {
+  const [er, setEr] = useState("");
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -10,12 +15,30 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
   return (
     <div className="login">
       <form
         noValidate
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(async (data) => {
+          setIsLoading(true);
+          setEr("");
+          const username = data.username;
+          const password = data.password;
+
+          try {
+            const res = await apiRequest.post("/auth/login", {
+              username,
+              password,
+            });
+
+            localStorage.setItem("user", JSON.stringify(res.data));
+            navigate("/");
+          } catch (err) {
+            setEr(err.response.data.message);
+          } finally {
+            setIsLoading(false);
+          }
+        })}
         className="formContainer"
       >
         <h1>Log In</h1>
@@ -41,7 +64,10 @@ const Login = () => {
           })}
         />
         {errors.password && <p className="errors">{errors.password.message}</p>}
-        <button type="submit">Sign In</button>
+        <button type="submit" disabled={isLoading}>
+          Sign In
+        </button>
+        {er && <span>{er}</span>}
         <Link to="/signup">Don't have an account? Sign Up here!</Link>
       </form>
 

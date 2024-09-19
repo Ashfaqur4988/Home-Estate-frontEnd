@@ -36,18 +36,22 @@
     }
 
     button {
-      height: 40px;
-      width: 16%;
+      height: 50px;
+      width: 40%;
       color: white;
-      background-color: #007217;
+      background-color: #016c16;
       border: none;
-      border-radius: 5px;
+      border-radius: 10px;
       cursor: pointer;
       font-size: 16px;
 
       @include sm {
         font-size: 12px;
       }
+    }
+
+    span {
+      color: red;
     }
 
     .errors {

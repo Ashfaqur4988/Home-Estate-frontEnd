@@ -1,21 +1,46 @@
+import axios from "axios";
 import "./signUpPage.scss";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import apiRequest from "../../lib/apiRequest";
 
 const SignUpPage = () => {
+  const [er, setEr] = useState("");
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-
-  const onSubmit = (data) => console.log(data);
   return (
     <div className="signUp">
       <form
         noValidate
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(async (data) => {
+          setIsLoading(true);
+          setEr("");
+          const username = data.username;
+          const email = data.email;
+          const password = data.password;
+
+          try {
+            const res = await apiRequest.post("/auth/register", {
+              username,
+              email,
+              password,
+            });
+
+            navigate("/login");
+          } catch (err) {
+            setEr(err.response.data.message);
+          } finally {
+            setIsLoading(false);
+          }
+        })}
         className="formContainer"
       >
         <h1>Create an Account</h1>
@@ -54,7 +79,10 @@ const SignUpPage = () => {
           })}
         />
         {errors.password && <p className="errors">{errors.password.message}</p>}
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={isLoading}>
+          Sign Up
+        </button>
+        {er && <span>{er}</span>}
         <Link to="/login">Already have an account? Log In here!</Link>
       </form>
 
