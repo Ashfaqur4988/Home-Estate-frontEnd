@@ -49,6 +49,18 @@
         font-size: 12px;
       }
     }
+
+    .errors {
+      color: red;
+
+      @include sm {
+        font-size: 12px;
+      }
+
+      @include md {
+        font-size: 14px;
+      }
+    }
   }
 
   .imageContainer {
