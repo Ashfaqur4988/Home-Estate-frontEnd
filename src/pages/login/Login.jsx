@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./login.scss";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import apiRequest from "../../lib/apiRequest.js";
+import { AuthContext } from "../../context/AuthContext.jsx";
 
 const Login = () => {
   const [er, setEr] = useState("");
@@ -14,6 +15,8 @@ const Login = () => {
     watch,
     formState: { errors },
   } = useForm();
+
+  const { updateUser } = useContext(AuthContext);
 
   return (
     <div className="login">
@@ -31,7 +34,7 @@ const Login = () => {
               password,
             });
 
-            localStorage.setItem("user", JSON.stringify(res.data));
+            updateUser(res.data);
             navigate("/");
           } catch (err) {
             setEr(err.response.data.message);
