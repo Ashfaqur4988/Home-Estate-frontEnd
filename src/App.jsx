@@ -8,7 +8,7 @@ import SinglePage from "./pages/singlePage/SinglePage";
 import SignUpPage from "./pages/signUpPage/SignUpPage";
 import ProfileUpdatePage from "./pages/profileUpdatePage/ProfileUpdatePage";
 import NewPostPage from "./pages/newPostPage/NewPostPage";
-import { listPageLoader, loaders } from "./lib/loaders";
+import { listPageLoader, loaders, profilePageLoader } from "./lib/loaders";
 function App() {
   const router = createBrowserRouter([
     {
@@ -36,7 +36,11 @@ function App() {
       path: "/",
       element: <RequireAuth />,
       children: [
-        { path: "/profile", element: <ProfilePage /> },
+        {
+          path: "/profile",
+          element: <ProfilePage />,
+          loader: profilePageLoader,
+        },
         { path: "/profile/update", element: <ProfileUpdatePage /> },
         { path: "/add", element: <NewPostPage /> },
       ],
