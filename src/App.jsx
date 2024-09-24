@@ -8,6 +8,7 @@ import SinglePage from "./pages/singlePage/SinglePage";
 import SignUpPage from "./pages/signUpPage/SignUpPage";
 import ProfileUpdatePage from "./pages/profileUpdatePage/ProfileUpdatePage";
 import NewPostPage from "./pages/newPostPage/NewPostPage";
+import { loaders } from "./lib/loaders";
 function App() {
   const router = createBrowserRouter([
     {
@@ -19,7 +20,7 @@ function App() {
           element: <HomePage />,
         },
         { path: "/list", element: <ListPage /> },
-        { path: "/:id", element: <SinglePage /> },
+        { path: "/:id", element: <SinglePage />, loader: loaders },
 
         {
           path: "/login",

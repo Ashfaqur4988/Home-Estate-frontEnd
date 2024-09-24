@@ -2,29 +2,31 @@ import Slider from "../../components/slider/Slider";
 import { singlePostData, userData } from "../../lib/dummyData";
 import "./singlePage.scss";
 import Map from "../../components/map/Map";
+import { useLoaderData } from "react-router-dom";
 
 const SinglePage = () => {
+  const post = useLoaderData();
   return (
     <div className="singlePage">
       <div className="details">
         <div className="wrapper">
-          <Slider images={singlePostData.images} />
+          <Slider images={post.images} />
           <div className="info">
             <div className="top">
               <div className="post">
-                <h1>{singlePostData.title}</h1>
+                <h1>{post.title}</h1>
                 <div className="address">
                   <img src="/pin.png" alt="" />
-                  <span>{singlePostData.address}</span>
+                  <span>{post.address}</span>
                 </div>
-                <div className="price">$ {singlePostData.price}</div>
+                <div className="price">$ {post.price}</div>
               </div>
               <div className="user">
-                <img src={userData.img} alt="" />
-                <span>{userData.name}</span>
+                <img src={post.user.avatar} alt="" />
+                <span>{post.user.username}</span>
               </div>
             </div>
-            <div className="bottom">{singlePostData.description}</div>
+            <div className="bottom">{post.postDetail.desc}</div>
           </div>
         </div>
       </div>
@@ -37,21 +39,21 @@ const SinglePage = () => {
               <img src="/utility.png" alt="" />
               <div className="featureText">
                 <span>Utilities</span>
-                <p>Renter is responsible</p>
+                <p>{post.postDetail.utilities}</p>
               </div>
             </div>
             <div className="feature">
               <img src="/pet.png" alt="" />
               <div className="featureText">
                 <span>Pet Policy</span>
-                <p>Pets are allowed</p>
+                <p>{post.postDetail.pet}</p>
               </div>
             </div>
             <div className="feature">
               <img src="/fee.png" alt="" />
               <div className="featureText">
                 <span>Property Fees</span>
-                <p>Must have 3x the rent in total household income</p>
+                <p>{post.postDetail.income}</p>
               </div>
             </div>
           </div>
@@ -60,21 +62,21 @@ const SinglePage = () => {
             <div className="size">
               <img src="/size.png" alt="" />
               <div className="sizeText">
-                <span>80sqft</span>
+                <span>{post.postDetail.size} sqft</span>
               </div>
             </div>
 
             <div className="size">
               <img src="/bed.png" alt="" />
               <div className="sizeText">
-                <span>2 beds</span>
+                <span>{post.bedroom} beds</span>
               </div>
             </div>
 
             <div className="size">
               <img src="/bath.png" alt="" />
               <div className="sizeText">
-                <span>1 bath</span>
+                <span>{post.bathroom} bath</span>
               </div>
             </div>
           </div>
@@ -83,21 +85,21 @@ const SinglePage = () => {
             <div className="size">
               <img src="/school.png" alt="" />
               <div className="sizeText">
-                <span>School</span>
+                <span>School {post.postDetail.school}m away</span>
               </div>
             </div>
 
             <div className="size">
               <img src="/restaurant.png" alt="" />
               <div className="sizeText">
-                <span>Restaurant</span>
+                <span>{post.postDetail.restaurant} Restaurant</span>
               </div>
             </div>
 
             <div className="size">
               <img src="/bus.png" alt="" />
               <div className="sizeText">
-                <span>Bus Stop</span>
+                <span>{post.postDetail.bus} Bus Stop</span>
               </div>
             </div>
           </div>
