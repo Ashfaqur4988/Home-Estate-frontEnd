@@ -1,12 +1,19 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "./chat.scss";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import { format } from "timeago.js";
+import { SocketContext } from "../../context/SocketContext";
 const Chat = ({ chats }) => {
   const [chat, setChat] = useState(null);
   const { currentUser } = useContext(AuthContext);
   console.log(chats);
+  const { socket } = useContext(SocketContext);
+  const messageEndRef = useRef();
+
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chat]);
 
   const handleOpenChat = async (id, receiver) => {
     try {
@@ -26,10 +33,32 @@ const Chat = ({ chats }) => {
       const res = await apiRequest.post("/messages/" + chat.id, { text });
       setChat((prev) => ({ ...prev, message: [...prev.message, res.data] }));
       e.target.reset();
+      socket.emit("sendMessage", {
+        receiverId: chat.receiver.id,
+        data: res.data,
+      });
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const read = async () => {
+      try {
+        await apiRequest.put(`/chats/read/${chat.id}`);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (chat && socket) {
+      socket.on("getMessage", (data) => {
+        if (chat.id === data.chatId) {
+          setChat((prev) => ({ ...prev, message: [...prev.message, data] }));
+          read();
+        }
+      });
+    }
+  }, [chat, socket]);
 
   return (
     <div className="chat">
@@ -37,20 +66,18 @@ const Chat = ({ chats }) => {
       <div className="messages">
         {chats.map((c) => (
           <div
+            style={{
+              backgroundColor:
+                c.seenBy.includes(currentUser.id) || chat?.id === c.id
+                  ? "white"
+                  : "#fecd514e",
+            }}
             className="message"
             key={c.id}
             onClick={() => handleOpenChat(c.id, c.receiver)}
           >
             <img src={c.receiver.avatar || "/noavatar.jpg"} alt="" />
-            <span
-              style={{
-                backgroundColor: c.seenBy.includes(currentUser.id)
-                  ? "white"
-                  : "#fecd514e",
-              }}
-            >
-              {c.receiver.username}
-            </span>
+            <span>{c.receiver.username}</span>
             <p>{c.lastMessage}</p>
           </div>
         ))}
@@ -82,10 +109,7 @@ const Chat = ({ chats }) => {
               </div>
             ))}
 
-            {/* <div className="chatMessage own">
-              <p>Lorem ipsum dolor sit amet...</p>
-              <span>1 hour ago</span>
-            </div> */}
+            <div ref={messageEndRef}></div>
           </div>
           <form className="bottom" onSubmit={handleSubmit}>
             <textarea name="text"></textarea>
