@@ -17,6 +17,20 @@ const Chat = ({ chats }) => {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const text = formData.get("text");
+    if (!text) return;
+    try {
+      const res = await apiRequest.post("/messages/" + chat.id, { text });
+      setChat((prev) => ({ ...prev, message: [...prev.message, res.data] }));
+      e.target.reset();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="chat">
       <h1>Messages</h1>
@@ -54,7 +68,15 @@ const Chat = ({ chats }) => {
           </div>
           <div className="center">
             {chat.message.map((m) => (
-              <div className="chatMessage" key={m.id}>
+              <div
+                className="chatMessage"
+                key={m.id}
+                style={{
+                  alignSelf:
+                    m.userId === currentUser.id ? "flex-end" : "flex-start",
+                  textAlign: m.userId === currentUser.id ? "right" : "left",
+                }}
+              >
                 <p>{m.text}</p>
                 <span>{format(m.createdAt)}</span>
               </div>
@@ -65,10 +87,10 @@ const Chat = ({ chats }) => {
               <span>1 hour ago</span>
             </div> */}
           </div>
-          <div className="bottom">
-            <textarea></textarea>
-            <button>Send</button>
-          </div>
+          <form className="bottom" onSubmit={handleSubmit}>
+            <textarea name="text"></textarea>
+            <button type="submit">Send</button>
+          </form>
         </div>
       )}
     </div>
