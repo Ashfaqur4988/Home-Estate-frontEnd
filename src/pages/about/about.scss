@@ -1,0 +1,16 @@
+@import "../../responsive.scss";
+
+.about {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10%;
+  line-height: 30px;
+  text-align: center;
+
+  @include sm {
+    margin: 5%;
+    line-height: 20px;
+  }
+}

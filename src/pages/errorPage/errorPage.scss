@@ -1,0 +1,16 @@
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  h1 {
+    margin: 50px;
+  }
+  h3 {
+    margin: 50px;
+  }
+  p {
+    margin: 50px;
+  }
+}

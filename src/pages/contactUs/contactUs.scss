@@ -1,0 +1,18 @@
+@import "../../responsive.scss";
+.contact {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 30px;
+
+  p {
+    text-align: center;
+    padding: 5px;
+  }
+
+  @include sm {
+    margin: 5%;
+    line-height: 20px;
+  }
+}

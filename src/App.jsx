@@ -9,6 +9,9 @@ import SignUpPage from "./pages/signUpPage/SignUpPage";
 import ProfileUpdatePage from "./pages/profileUpdatePage/ProfileUpdatePage";
 import NewPostPage from "./pages/newPostPage/NewPostPage";
 import { listPageLoader, loaders, profilePageLoader } from "./lib/loaders";
+import ErrorPage from "./pages/errorPage/ErrorPage";
+import ContactUs from "./pages/contactUs/ContactUs";
+import About from "./pages/about/About";
 function App() {
   const router = createBrowserRouter([
     {
@@ -30,6 +33,18 @@ function App() {
           path: "/signup",
           element: <SignUpPage />,
         },
+        {
+          path: "*",
+          element: <ErrorPage />,
+        },
+        {
+          path: "/contact",
+          element: <ContactUs />,
+        },
+        {
+          path: "/about",
+          element: <About />,
+        },
       ],
     },
     {
@@ -43,6 +58,10 @@ function App() {
         },
         { path: "/profile/update", element: <ProfileUpdatePage /> },
         { path: "/add", element: <NewPostPage /> },
+        {
+          path: "*",
+          element: <ErrorPage />,
+        },
       ],
     },
   ]);
